@@ -1,0 +1,11 @@
+fastapi==0.70.0
+uvicorn==0.15.0
+jinja2
+black
+aiofiles
+python-multipart
+SQLAlchemy== 1.4.0b2 # 1.4.3 #   1.4.31 will check that the db is truly async, which pysqlite is not...
+progressbar2
+python-dateutil
+passlib
+aiosqlite==0.17.0
