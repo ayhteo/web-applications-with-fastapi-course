@@ -14,6 +14,10 @@ class DetailsViewModel(ViewModelBase):
             package_name
         )
         self.is_latest = True
+        self.maintainers = []
         if not self.package:
             return
         self.x = 9
+
+        r = self.latest_release
+        self.latest_version = f"{r.major_ver}.{r.minor_ver}.{r.build_ver}"

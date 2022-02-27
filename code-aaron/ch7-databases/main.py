@@ -24,10 +24,10 @@ def configure_templates():
 
 
 def configure_db(dev_mode: bool):
-    './db/sqlite'
-    file = (Path(__file__).parent / 'db' / 'pypi.sqlite').absolute()
+    "./db/sqlite"
+    file = (Path(__file__).parent / "db" / "pypi.sqlite").absolute()
     db_session.global_init(file.as_posix())
-    
+
 
 def configure_routes():
     app.include_router(home.router)

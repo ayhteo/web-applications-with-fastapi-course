@@ -1,6 +1,7 @@
 from view_models.shared.viewmodel import ViewModelBase
 from data.user import User
 from fastapi import Request
+import services.user_service as user_service
 
 
 class AccountViewModel(ViewModelBase):
@@ -9,4 +10,4 @@ class AccountViewModel(ViewModelBase):
         request: Request,
     ):
         super().__init__(request)
-        self.user = User("AaronTeo", "ayhteo@gmail.com", "rhfbjhkdshias")
+        self.user = user_service.get_user_by_id(self.user_id)

@@ -1,41 +1,70 @@
 from typing import List, Optional
 from data.package import Package
 from data.release import Release
+from data.user import User
 import datetime
+import data.db_session as db_session
+import sqlalchemy.orm as orm
 
 
 def release_count() -> int:
-    return 1
+    session = db_session.create_session()
+    try:
+        return session.query(Release).count()
+    finally:
+        session.close()
 
 
 def package_count() -> int:
-    return 2
+    session = db_session.create_session()
+    try:
+        return session.query(Package).count()
+    finally:
+        session.close()
 
 
 def user_count() -> int:
-    return 3
+    session = db_session.create_session()
+    try:
+        return session.query(User).count()
+    finally:
+        session.close()
 
 
 def latest_packages(limit: int = 5) -> List:
-    return [
-        {"id": "fastapi", "summary": "A great web framework"},
-        {"id": "uvicorn", "summary": "Your favourite ASGI server"},
-        {"id": "httpx", "summary": "Requests fro an async world"},
-    ][:limit]
+    session = db_session.create_session()
+    try:
+        releases = (
+            session.query(Release)
+            .options(orm.joinedload(Release.package))
+            .order_by(Release.created_date.desc())
+            .limit(limit)
+            .all()
+        )
+    finally:
+        session.close()
+    # sets prevent repeat
+    return {r.package for r in releases}
 
 
 def get_package_by_id(package_name: str) -> Optional[Package]:
-    package = Package(
-        "fake_news",
-        "I am not Donald Trump",
-        "Long Live America",
-        "www.wikipedia.com",
-        "MIT license",
-        "Aaron Teo",
-        [],
-    )
-    return package
+    session = db_session.create_session()
+    try:
+        package = session.query(Package).filter(Package.id == package_name).first()
+        return package
+    finally:
+        session.close()
 
 
 def get_latest_release_for_package(package_name: str) -> Optional[Release]:
-    return Release(version="1.0.0", created_date=datetime.datetime.now())
+    session = db_session.create_session()
+    try:
+        release = (
+            session.query(Release)
+            .filter(Release.package_id == package_name)
+            .order_by(Release.created_date.desc())
+            .first()
+        )
+        return release
+    finally:
+        session.close()
