@@ -5,4 +5,4 @@ aiofiles
 # This is now available on PyPI.org so we'll be using that one going forward.
 fastapi-chameleon==0.1.12
 
-starlette==0.16.0
+starlette==0.25.0
